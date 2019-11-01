@@ -47,6 +47,15 @@ func Mod(module string) func(string) func(string) func(...Case) func(*testing.T)
 	}
 }
 
+func stringify(x interface{}) string {
+    switch x.(type) {
+    case fmt.Stringer:
+        return x.(fmt.Stringer).String()
+    default:
+        return fmt.Sprintf("%v", x)
+    }
+}
+
 func fmtErr(unit *unit, c *Case, actual interface{}) string {
-	return fmt.Sprintf("[TEST %s.%s FAILED] SHOULD %s | EXPECTED %v :: %T BUT GOT %v :: %T", unit.module, unit.name, unit.should, c.Expected, c.Expected, actual, actual)
+	return fmt.Sprintf("[TEST %s.%s FAILED] SHOULD %s | EXPECTED %v :: %T BUT GOT %v :: %T", unit.module, unit.name, unit.should, stringify(c.Expected), c.Expected, stringify(actual), actual)
 }
