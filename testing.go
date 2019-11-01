@@ -7,9 +7,9 @@ import (
 )
 
 type TestCase struct {
-	args   []interface{}
-	expect interface{}
-	f      func(args []interface{}) interface{}
+	Args     []interface{}
+	Expected interface{}
+	F        func(args []interface{}) interface{}
 }
 
 type unitTest struct {
