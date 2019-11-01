@@ -21,8 +21,8 @@ type Case struct {
 	F        func() interface{}
 }
 
-func Test(module string) func(string, *testing.T) func(string, interface{}, func() interface{}) {
-	return func(name string, t *testing.T) func(string, interface{}, func() interface{}) {
+func Test(module string) func(string, *testing.T) func(should string, expected interface{}, f func() interface{}) {
+	return func(name string, t *testing.T) func(should string, expected interface{}, f func() interface{}) {
 		return func(should string, expected interface{}, f func() interface{}) {
 			for k := uint(0); k < Ctxt.NRuns; k++ {
 				actual := f()
