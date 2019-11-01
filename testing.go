@@ -30,7 +30,7 @@ func run(module string, name string, should string, cases ...Case) func(t *testi
 		for _, c := range cases {
 			actual := c.F()
 			if !reflect.DeepEqual(actual, c.Expected) {
-				t.Errorf(fmtErr(&unit, &c, idx, actual))
+				t.Errorf(fmtErr(&unit, &c, actual))
 			}
 		}
 		idx++
@@ -47,6 +47,6 @@ func Mod(module string) func(string) func(string) func(...Case) func(*testing.T)
 	}
 }
 
-func fmtErr(unit *unit, c *Case, idx uint, actual interface{}) string {
-	return fmt.Sprintf("[TEST %s.%s FAILED] case #%d | SHOULD %s | EXPECTED %v BUT GOT %v", unit.module, unit.name, idx, unit.should, c.Expected, actual)
+func fmtErr(unit *unit, c *Case, actual interface{}) string {
+	return fmt.Sprintf("[TEST %s.%s FAILED] SHOULD %s | EXPECTED %v :: %T BUT GOT %v :: %T", unit.module, unit.name, unit.should, c.Expected, c.Expected, actual, actual)
 }
