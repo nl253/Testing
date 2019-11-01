@@ -19,7 +19,7 @@ type unitTest struct {
 	cases  []TestCase
 }
 
-func Run(module string, name string, should string, cases ...TestCase) func(t *testing.T) {
+func run(module string, name string, should string, cases ...TestCase) func(t *testing.T) {
 	unit := unitTest{
 		name:   name,
 		should: should,
@@ -38,21 +38,13 @@ func Run(module string, name string, should string, cases ...TestCase) func(t *t
 	}
 }
 
-func Mod(module string) func(name string, should string, cases ...TestCase) func(t *testing.T) {
-	return func(name string, should string, cases ...TestCase) func(t *testing.T) {
-		return Run(module, name, should, cases...)
-	}
-}
-
-func Func(module string, funcName string) func(should string, cases ...TestCase) func(t *testing.T) {
-	return func(should string, cases ...TestCase) func(t *testing.T) {
-		return Run(module, funcName, should, cases...)
-	}
-}
-
-func Should(module string, funcName string, should string) func(cases ...TestCase) func(t *testing.T) {
-	return func(cases ...TestCase) func(t *testing.T) {
-		return Run(module, funcName, should, cases...)
+func Mod(module string) func(string) func(string) func(...TestCase) func(*testing.T) {
+	return func(name string) func(string) func(...TestCase) func(*testing.T) {
+		return func(should string) func(...TestCase) func(*testing.T) {
+			return func(cases ...TestCase) func(*testing.T) {
+				return run(module, name, should, cases...)
+			}
+		}
 	}
 }
 
