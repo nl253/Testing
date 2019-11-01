@@ -18,18 +18,16 @@ func TestList_Empty(t *testing.T) {
     should := funct("Empty")
 
     should("be true for empty list")(ut.Case{
-        Args: []interface{}{New()},
         Expected: true,
-        F: func(args []interface{}) interface{} {
-            return args[0].(*List).Empty()
+        F: func() interface{} {
+            return New().Empty()
         },
     })(t)
 
     should("be false for non-empty list")(ut.Case{
-        Args: []interface{}{New(1)},
         Expected: false,
-        F: func(args []interface{}) interface{} {
-            return args[0].(*List).Empty()
+        F: func() interface{} {
+            return New(1).Empty()
         },
     })(t)
 }
