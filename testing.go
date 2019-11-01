@@ -21,21 +21,13 @@ type Case struct {
 	F        func() interface{}
 }
 
-func Test(module string) func(string) func(string) func(...Case) func(*testing.T) {
-	return func(name string) func(string) func(...Case) func(*testing.T) {
-		return func(should string) func(...Case) func(*testing.T) {
-			return func(cases ...Case) func(*testing.T) {
-				return func(t *testing.T) {
-					var idx uint = 0
-					for k := uint(0); k < Ctxt.NRuns; k++ {
-						for _, c := range cases {
-							actual := c.F()
-							if !isEq(actual, c.Expected) {
-								t.Errorf(fmtErr(module, name, should, &c, actual))
-							}
-						}
-						idx++
-					}
+func Test(module string) func(string, *testing.T) func(string, interface{}, func() interface{}) {
+	return func(name string, t *testing.T) func(string, interface{}, func() interface{}) {
+		return func(should string, expected interface{}, f func() interface{}) {
+			for k := uint(0); k < Ctxt.NRuns; k++ {
+				actual := f()
+				if !isEq(actual, expected) {
+					t.Errorf(fmtErr(module, name, should, expected, actual))
 				}
 			}
 		}
@@ -60,9 +52,9 @@ func stringify(x interface{}) string {
 	}
 }
 
-func fmtErr(module string, name string, should string, c *Case, actual interface{}) string {
+func fmtErr(module string, name string, should string, expected interface{}, actual interface{}) string {
 	return fmt.Sprintf("\n\n[TEST %s.%s FAILED]\n\n"+
 		"SHOULD   %s\n\n"+
 		"EXPECTED %v :: %T\n"+
-		"GOT      %v :: %T", module, name, should, stringify(c.Expected), c.Expected, stringify(actual), actual)
+		"GOT      %v :: %T", module, name, should, stringify(expected), expected, stringify(actual), actual)
 }
