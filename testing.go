@@ -21,7 +21,7 @@ type Case struct {
 	F        func() interface{}
 }
 
-func Mod(module string) func(string) func(string) func(...Case) func(*testing.T) {
+func Test(module string) func(string) func(string) func(...Case) func(*testing.T) {
 	return func(name string) func(string) func(...Case) func(*testing.T) {
 		return func(should string) func(...Case) func(*testing.T) {
 			return func(cases ...Case) func(*testing.T) {
