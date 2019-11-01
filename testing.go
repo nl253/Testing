@@ -7,9 +7,8 @@ import (
 )
 
 type Case struct {
-	Args     []interface{}
 	Expected interface{}
-	F        func(args []interface{}) interface{}
+	F        func() interface{}
 }
 
 type unit struct {
@@ -29,7 +28,7 @@ func run(module string, name string, should string, cases ...Case) func(t *testi
 	return func(t *testing.T) {
 		var idx uint = 0
 		for _, c := range cases {
-			actual := c.F(c.Args)
+			actual := c.F()
 			if !reflect.DeepEqual(actual, c.Expected) {
 				t.Errorf(fmtErr(&unit, &c, idx, actual))
 			}
