@@ -45,8 +45,8 @@ func isEq(x interface{}, y interface{}) bool {
 
 func stringify(x interface{}) string {
 	switch x.(type) {
-	case fmt.Stringer:
-		return x.(fmt.Stringer).String()
+	// case fmt.Stringer:
+	// 	return x.(fmt.Stringer).String()
 	default:
 		return fmt.Sprintf("%v", x)
 	}
@@ -55,6 +55,6 @@ func stringify(x interface{}) string {
 func fmtErr(module string, name string, should string, expected interface{}, actual interface{}) string {
 	return fmt.Sprintf("\n\n[TEST %s.%s FAILED]\n\n"+
 		"SHOULD   %s\n\n"+
-		"EXPECTED %v :: %T\n"+
-		"GOT      %v :: %T", module, name, should, stringify(expected), expected, stringify(actual), actual)
+		"EXPECTED %20v :: %T\n"+
+		"GOT      %20v :: %T", module, name, should, stringify(expected), expected, stringify(actual), actual)
 }
